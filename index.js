@@ -14,14 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch(monstersLimit50, { method: "GET" }) // defaults to GET
     .then(r => r.json())
     .then(arrayOf50MonsterObjects => {
-      arrayOf50MonsterObjects.forEach((monsterObj) => {
-        // console.log(monsterObj);
-        monsterContainer.innerHTML += `<ul>
-        <h2>${monsterObj.name}</h2>
-        Age: ${Math.floor(parseFloat(monsterObj.age))} years old <br><br>
-        Bio: ${monsterObj.description}
-        </ul>`
-      })
+      show50Monsters(arrayOf50MonsterObjects)
+      // arrayOf50MonsterObjects.forEach((monsterObj) => {
+      //   // console.log(monsterObj);
+      //   monsterContainer.innerHTML += `<ul>
+      //   <h2>${monsterObj.name}</h2>
+      //   Age: ${Math.floor(parseFloat(monsterObj.age))} years old <br><br>
+      //   Bio: ${monsterObj.description}
+      //   </ul>`
+      // })
     })
 
     // fetch to post to monsters the created monster ON THE FORM SUBMIT EVENT
@@ -78,16 +79,27 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('http://localhost:3000/monsters/?_limit=50&_page=2', { method: "GET" })
         .then(r => r.json())
         .then(arrayofNext50MonsterObjs => {
-          arrayofNext50MonsterObjs.forEach((monsterObj) => {
-            // console.log(monsterObj);
-            monsterContainer.innerHTML += `<ul>
-            <h2>${monsterObj.name}</h2>
-            Age: ${Math.floor(parseFloat(monsterObj.age))} years old <br><br>
-            Bio: ${monsterObj.description}
-            </ul>`
-          })
+          show50Monsters(arrayofNext50MonsterObjs)
+          // arrayofNext50MonsterObjs.forEach((monsterObj) => {
+          //   // console.log(monsterObj);
+          //   monsterContainer.innerHTML += `<ul>
+          //   <h2>${monsterObj.name}</h2>
+          //   Age: ${Math.floor(parseFloat(monsterObj.age))} years old <br><br>
+          //   Bio: ${monsterObj.description}
+          //   </ul>`
+          // })
         })
     })
 
+    // ************** HELPER(S) ************************
+    function show50Monsters(monsterObjectsArray) {
+      monsterObjectsArray.forEach((monsterObj) => {
+        monsterContainer.innerHTML += `<ul>
+        <h2>${monsterObj.name}</h2>
+        Age: ${Math.floor(parseFloat(monsterObj.age))} years old <br><br>
+        Bio: ${monsterObj.description}
+        </ul>`
+      })
+    }
+
 }) // end of DOMContentLoaded
-// At the end of the list of monsters, show a button. When clicked, the button should load the next 50 monsters and show them.
