@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   /*******************  DOM ELEMENTS ******************/
+  const loadNext50Btn = document.getElementById('load-next-50')
   const monsterContainer = document.getElementById('monster-container')
   const monsterForm = document.getElementById('monster-form')
   // console.log(monsterForm);
@@ -68,8 +69,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         })
         event.target.reset()
-
     }) // end monsterform eventlistener
 
+    // add click event to the button at bottom of page: the loadNext50Btn
+    loadNext50Btn.addEventListener('click', e => {
+      // console.log(e.target); // grabs the button element
+      // on click, fetch next 50 monsters
+      fetch('http://localhost:3000/monsters/?_limit=50&_page=2', { method: "GET" })
+        .then(r => r.json())
+        .then(arrayofNext50MonsterObjs => {
+          arrayofNext50MonsterObjs.forEach((monsterObj) => {
+            // console.log(monsterObj);
+            monsterContainer.innerHTML += `<ul>
+            <h2>${monsterObj.name}</h2>
+            Age: ${Math.floor(parseFloat(monsterObj.age))} years old <br><br>
+            Bio: ${monsterObj.description}
+            </ul>`
+          })
+        })
+    })
 
 }) // end of DOMContentLoaded
+// At the end of the list of monsters, show a button. When clicked, the button should load the next 50 monsters and show them.
