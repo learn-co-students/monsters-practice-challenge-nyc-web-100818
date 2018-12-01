@@ -16,8 +16,19 @@ json-server monsters.json
 
 ## Objectives
 - When the page loads, show the first 50 monsters. Each monster's name, age, and description should be shown.
+
 - Above your list of monsters, you should have a form to create a new monster. You should have fields for name, age, and description, and a 'Create Monster Button'. When you click the button, the monster should be added to the list and saved in the API.
+1. create an html form element and paste it into ur html above the list
+2. add in a button element w type submit
+3. add a SUBMIT event since this is a FORM
+4. submit event should be on the entire form - forms try to post so remember to preventdefault
+5. make a post request to the server to make the new monster
+6. render the new monster to the page
+
 - At the end of the list of monsters, show a button. When clicked, the button should load the next 50 monsters and show them.
+1. create a button in the html
+2. add a CLICK event to the button that fetches the next fifty monsters
+3. display the fetched data
 
 
 ## API methods
@@ -62,7 +73,7 @@ Create a monster
 
 ```
 POST http://localhost:3000/monsters
-headers: 
+headers:
 {
   "Content-Type": "application/json",
   Accept: "application/json"
