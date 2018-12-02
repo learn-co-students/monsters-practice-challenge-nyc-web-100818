@@ -1,0 +1,14 @@
+/* label {
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+} */
+
+#create-monster {
+  width: 500px;
+  clear: both;
+}
+#create-monster input {
+  width: 100%;
+  clear: both;
+}
