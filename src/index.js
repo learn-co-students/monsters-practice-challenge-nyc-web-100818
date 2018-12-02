@@ -9,8 +9,9 @@
 const monsterContainer = document.querySelector("#monster-container");
 const createMonsterForm = document.querySelector("#create-monster");
 const backButton = document.querySelector("#back");
-const fowardButton = document.querySelector("#forward");
+const forwardButton = document.querySelector("#forward");
 let allMonsters = [];
+let currentPage = 1;
 
 // **********GLOBAL VARIABLES*********
 const first50URL = "http://localhost:3000/monsters/?_limit=50";
@@ -21,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function() {
   console.log("Welcome to Monstr Inc.");
   getMonsters();
   createMonster();
+  nextPage();
+  lastPage();
 });
 
 const getMonsters = function() {
@@ -42,6 +45,7 @@ const createMonster = function(e) {
     let nameInput = document.querySelector("#name-input").value;
     let ageInput = document.querySelector("#age-input").value;
     let descriptionInput = document.querySelector("#description-input").value;
+  
     fetch(allMonstersURL, {
       method: "POST",
       headers: {
@@ -53,18 +57,47 @@ const createMonster = function(e) {
         "age": ageInput,
         "description": descriptionInput
       })
-    });
+    })
+    .then(r=>r.json())
+    .then(r=>console.log("New monster:",r));
     alert(`${nameInput} has been added to the Monster Database`)
-    // monsterContainer.innerHTML += `<div class="monster-card"">
-    //         <h3>Name : ${nameInput}</h3>
-    //         <h3>Age : ${ageInput}</h3>
-    //         <h3>Description:
-    //         <p>${descriptionInput}</p>
-    //         </h3>
-    //       </div>`;
+
   });
+
+
 };
 
+const nextPage = function (){
+forwardButton.addEventListener('click',function(e){
+  currentPage ++
+  fetch(`http://localhost:3000/monsters/?_limit=50&_page=${currentPage}`)
+  .then(r=>{
+    console.log("Fetching next 50 monsters")
+    return r.json()
+  })
+  .then(parsedMonsters=>{
+    allMonsters=parsedMonsters;
+    console.table(parsedMonsters);
+    monsterContainer.innerHTML=renderMonsters(parsedMonsters);
+  })
+})
+}
+
+const lastPage = function (){
+backButton.addEventListener('click',function(e){
+  currentPage --
+  fetch(`http://localhost:3000/monsters/?_limit=50&_page=${currentPage}`)
+  .then(r=>{
+    console.log("Fetching previous 50 monsters")
+    return r.json()
+  })
+  .then(parsedMonsters=>{
+    allMonsters=parsedMonsters;
+    console.table(parsedMonsters);
+    monsterContainer.innerHTML=renderMonsters(parsedMonsters);
+  })
+})
+}
 // *************HELPER FUNCTIONS***************
 
 const renderMonsters = function(monsterArray) {
