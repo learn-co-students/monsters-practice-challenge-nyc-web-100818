@@ -9,26 +9,23 @@
   const divForEachMonster = document.createElement('div')
   const createFormId = document.querySelector('#new-monster-form')
   const editMonsterButton = document.querySelectorAll("#edit-monster-button")
+  const editMonsterForm = document.querySelector("#edit-monster-form")
+  const editNameInputValue = document.querySelector('#edit-monster-name')
+  const editDescriptionInputValue = document.querySelector('#edit-monster-description')
+  const editAgeInputValue = document.querySelector('#edit-monster-age')
+
+  let allData = []
+
 
    // TODO: pageNum clicks/limits between 1 and page number of the last element
   let pageNum = 1
-
-  const editFormHTML =`
-  <form id="edit-monster-form">
-  <label for="name">Name: </label>
-  <input id="new-monster-name" type="text" name="name"></input>
-  <label for="description">Bio: </label>
-  <input id="new-monster-description" type="text" name="name"></input>
-  <label for="age">Age: </label>
-  <input id="new-monster-age" type="text" name="name"></input>
-  <input type="submit" name="" value="Edit Monster">`
-  editMonsterDiv.innerHTML += editFormHTML
 
  fetchMonsterData = () => {
    // console.log(pageNum);
    fetch(`http://localhost:3000/monsters/?_limit=50&_page=${pageNum}`, {method : 'GET'})
     .then(response => response.json() )
     .then(json => {
+      allData = json
       divForEachMonster.innerHTML = ""
       json.forEach(function(monster) {
         monsterContainer.append(divForEachMonster)
@@ -36,7 +33,7 @@
         <h2>${monster.name}</h2>
         <h4>Age: ${monster.age}</h4>
         <p>Bio: ${monster.description}</p>
-        <button id="edit-monster-button">Edit</button>`
+        <button id=${monster.id}>Edit</button>`
       }) // json.forEach(function(monster) -- ENDS HERE
     }) // .then json -- ENDS HERE
  } // fetchMonsterData function -- ENDS HERE
@@ -84,28 +81,35 @@
    createMonsterData()
  }) // createFormId.addEventListener('submit' ENDS HERE
 
- // editMonster.addEventListener("submit", event => {
- //   // 1. DO YOUR DOM MANIPULATION FIRST
- //   // get the values from the form
- //   // find the monster that you clicked on
- //   // rewrite the monster on the dom with the NEW INFORMATION
- //   // 2. WORK WITH YOUR server
- //   // patch request
- //   event.preventDefault()
- //   editFetchedMonsterData = (mosterId) => {
- //      fetch(`http://localhost:3000/monsters/${monsterId}`, {
- //        method : 'PATCH',
- //        headers : {
- //          "Content-Type": "application/json",
- //          Accept: "application/json"
- //        },
- //        body: JSON.stringify({
- //          name: nameInputValue,
- //          age: descriptionInputValue,
- //          description: ageInputValue
- //        })
- //      }) // fetch ENDS HERE
- //    } // .then json -- ENDS HERE
- //  })
+ monsterContainer.addEventListener('click', event => {
+   event.preventDefault()
+   clickedMonsterId = parseInt(event.target.id)
+   targetMonster = allData.find(monster => monster.id === clickedMonsterId);
+   editNameInputValue.value = targetMonster.name
+   editDescriptionInputValue.value = targetMonster.description
+   editAgeInputValue.value = targetMonster.age
+   editMonsterForm.id = targetMonster.id
+ })
 
+ editMonsterForm.addEventListener('submit', function(event) {
+   event.preventDefault();
+   monsterId = parseInt(event.target.id);
+     fetch(`http://localhost:3000/monsters/${monsterId}`, {
+       method : 'PATCH',
+       headers : {
+         "Content-Type": "application/json",
+         Accept: "application/json"
+       },
+       body: JSON.stringify({
+         name: editNameInputValue.value,
+         age: editDescriptionInputValue.value,
+         description: editAgeInputValue.value
+       })
+     }) // fetch ENDS HERE
+     .then(r => r.json())
+     .then(data => {
+       showDogData();
+     }) // .then json -- ENDS HERE
+     event.target.reset();
+   })
  }) // document.addEventListener('DOMContentLoaded' -- ENDS HERE

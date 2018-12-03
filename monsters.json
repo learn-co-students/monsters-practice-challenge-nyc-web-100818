@@ -1,9 +1,9 @@
 {
   "monsters": [
     {
-      "name": "Chronos",
-      "age": 4005.302453418598,
-      "description": "Effulgence eldritch shunned foetid. Ululate gibbering tenebrous foetid iridescence daemoniac. Stench nameless gambrel. Amorphous furtive iridescence noisome. Foetid mortal nameless.",
+      "name": "Bhronos",
+      "age": "Bulamadim eldritch shunned foetid. Ululate gibbering tenebrous foetid iridescence daemoniac. Stench nameless gambrel. Amorphous furtive iridescence noisome. Foetid mortal nameless.",
+      "description": "4.302453418598",
       "id": 1
     },
     {
